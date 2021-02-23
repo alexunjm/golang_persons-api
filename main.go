@@ -1,7 +1,7 @@
 package main
 
-import "github.com/alexunjm/golang_persons-api/src/infrastructure/gingonic"
+import . "github.com/alexunjm/golang_persons-api/src/infrastructure"
 
 func main() {
-	gingonic.StartServer()
+	StartApp()
 }

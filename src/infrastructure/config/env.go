@@ -1,4 +1,4 @@
-package infrastructure
+package config
 
 import (
 	"os"
@@ -19,7 +19,7 @@ type MySQL struct {
 	port     string
 }
 
-func loadAppEnv() {
+func LoadAppEnv() {
 	app = App{
 		MySLQEnv: MySQL{
 			driver:   os.Getenv("DRIVER"),

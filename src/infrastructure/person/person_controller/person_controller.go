@@ -1,4 +1,4 @@
-package persons_controller
+package person_controller
 
 import (
 	"net/http"

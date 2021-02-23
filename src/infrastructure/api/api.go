@@ -1,6 +1,7 @@
-package infrastructure
+package api
 
 import (
+	"golang_persons-api/src/infrastructure/config"
 	"log"
 
 	"github.com/gin-gonic/gin"
@@ -15,13 +16,13 @@ var (
 func init() {
 	//loads values from .env into the system
 	if err := goDotEnv.Load(); err != nil {
-		log.Print("sad .env file found")
+		log.Print(".env file not found")
 	}
 }
 
 // StartApp func starts the gin gonic api
 func StartApp() {
-	loadAppEnv()
+	config.LoadAppEnv()
 
 	routes()
 

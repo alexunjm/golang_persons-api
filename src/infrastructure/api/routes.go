@@ -1,11 +1,11 @@
-package infrastructure
+package api
 
 import (
-	"net/http"
-
-	"github.com/alexunjm/golang_persons-api/src/infrastructure/persons/persons_router"
+	"golang_persons-api/src/infrastructure/person/person_router"
 
 	"github.com/gin-gonic/gin"
+
+	"net/http"
 )
 
 func routes() {
@@ -15,5 +15,5 @@ func routes() {
 		c.String(http.StatusOK, "working")
 	})
 
-	persons_router.HandleRoutes()
+	person_router.HandleRoutes(Router)
 }

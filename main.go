@@ -1,7 +1,7 @@
 package main
 
-import . "github.com/alexunjm/golang_persons-api/src/infrastructure"
+import "golang_persons-api/src/infrastructure/api"
 
 func main() {
-	StartApp()
+	api.StartApp()
 }

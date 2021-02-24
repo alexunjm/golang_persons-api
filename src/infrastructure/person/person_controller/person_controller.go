@@ -1,6 +1,9 @@
 package person_controller
 
 import (
+	"fmt"
+	"golang_persons-api/src/application/person/person_command"
+	"golang_persons-api/src/application/person/person_query"
 	"golang_persons-api/src/infrastructure/exception"
 	"net/http"
 	"strconv"
@@ -8,33 +11,71 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-var message = gin.H{
-	"test": "ok",
+var (
+	message = gin.H{
+		"test": "ok",
+	}
+)
+
+type PersonController struct {
 }
 
 // GetPerson func gets person by id
 func GetPerson(c *gin.Context) {
-	// personID, err := getMessageID(c.Param("person_id"))
-	// if err != nil {
-	// 	c.JSON(err.Status(), err)
-	// 	return
-	// }
-	c.JSON(http.StatusOK, message)
+
+	personQuery := person_query.FindPersonQuery{ID: c.Param("person_id")}
+
+	sample := personQuery.GetImmutable()
+	fmt.Printf("%+v", sample)
+	fmt.Printf("id: %v",
+		sample.GetID(),
+	)
+	// // dispatch command
+	// services.CommandBus.dispatch(&personQuery)
+
+	c.JSON(http.StatusOK, personQuery)
 }
 
 // GetAllPersons func gets all persons
 func GetAllPersons(c *gin.Context) {
+
 	c.JSON(http.StatusOK, message)
 }
 
 // CreatePerson func creates a new person
 func CreatePerson(c *gin.Context) {
-	c.JSON(http.StatusOK, message)
+	var personCommand person_command.CreatePersonCommand
+	if err := c.ShouldBindJSON(&personCommand); err != nil {
+		theErr := exception.NewUnprocessableEntityError("invalid json body")
+		c.JSON(theErr.Status(), theErr)
+		return
+	}
+	// sample := personCommand.GetImmutable()
+	// fmt.Printf("%+v", sample)
+	// fmt.Printf("id: %v, firstname: %v, lastname: %v, age: %v",
+	// 	sample.GetID(),
+	// 	sample.GetFirstname(),
+	// 	sample.GetLastname(),
+	// 	sample.GetAge(),
+	// )
+	// // dispatch command
+	// services.CommandBus.dispatch(&personCommand)
+
+	c.JSON(http.StatusCreated, personCommand)
 }
 
 // UpdatePerson func updates a person
 func UpdatePerson(c *gin.Context) {
-	c.JSON(http.StatusOK, message)
+	var personCommand person_command.UpdatePersonCommand
+	if err := c.ShouldBindJSON(&personCommand); err != nil {
+		theErr := exception.NewUnprocessableEntityError("invalid json body")
+		c.JSON(theErr.Status(), theErr)
+		return
+	}
+	// sample := personCommand.GetImmutable()
+	// fmt.Printf("%+v", sample)
+
+	c.JSON(http.StatusOK, personCommand)
 }
 
 // DeletePerson func deletes a person

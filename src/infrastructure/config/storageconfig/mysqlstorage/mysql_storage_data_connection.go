@@ -1,4 +1,4 @@
-package mysqlStorage
+package mysqlstorage
 
 const (
 	EnvDriver   = "MYSQL_DRIVER"

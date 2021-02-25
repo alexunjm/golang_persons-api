@@ -1,9 +1,9 @@
-package personController
+package personcontroller
 
 import (
 	"fmt"
-	"golang_persons-api/src/application/person/personCommand"
-	"golang_persons-api/src/application/person/personQuery"
+	"golang_persons-api/src/application/person/personcommand"
+	"golang_persons-api/src/application/person/personquery"
 	"golang_persons-api/src/infrastructure/exception"
 	"net/http"
 	"strconv"
@@ -17,23 +17,23 @@ var (
 	}
 )
 
-type PersonController struct {
+type personcontroller struct {
 }
 
 // GetPerson func gets person by id
 func GetPerson(c *gin.Context) {
 
-	personQuery := personQuery.FindPersonQuery{ID: c.Param("person_id")}
+	personquery := personquery.Findpersonquery{ID: c.Param("person_id")}
 
-	sample := personQuery.GetImmutable()
+	sample := personquery.GetImmutable()
 	fmt.Printf("%+v", sample)
 	fmt.Printf("id: %v",
 		sample.GetID(),
 	)
 	// // dispatch command
-	// services.CommandBus.dispatch(&personQuery)
+	// services.CommandBus.dispatch(&personquery)
 
-	c.JSON(http.StatusOK, personQuery)
+	c.JSON(http.StatusOK, personquery)
 }
 
 // GetAllPersons func gets all persons
@@ -44,13 +44,13 @@ func GetAllPersons(c *gin.Context) {
 
 // CreatePerson func creates a new person
 func CreatePerson(c *gin.Context) {
-	var personCommand personCommand.CreatePersonCommand
-	if err := c.ShouldBindJSON(&personCommand); err != nil {
+	var personcommand personcommand.Createpersoncommand
+	if err := c.ShouldBindJSON(&personcommand); err != nil {
 		theErr := exception.NewUnprocessableEntityError("invalid json body")
 		c.JSON(theErr.Status(), theErr)
 		return
 	}
-	// sample := personCommand.GetImmutable()
+	// sample := personcommand.GetImmutable()
 	// fmt.Printf("%+v", sample)
 	// fmt.Printf("id: %v, firstname: %v, lastname: %v, age: %v",
 	// 	sample.GetID(),
@@ -59,23 +59,23 @@ func CreatePerson(c *gin.Context) {
 	// 	sample.GetAge(),
 	// )
 	// // dispatch command
-	// services.CommandBus.dispatch(&personCommand)
+	// services.CommandBus.dispatch(&personcommand)
 
-	c.JSON(http.StatusCreated, personCommand)
+	c.JSON(http.StatusCreated, personcommand)
 }
 
 // UpdatePerson func updates a person
 func UpdatePerson(c *gin.Context) {
-	var personCommand personCommand.UpdatePersonCommand
-	if err := c.ShouldBindJSON(&personCommand); err != nil {
+	var personcommand personcommand.Updatepersoncommand
+	if err := c.ShouldBindJSON(&personcommand); err != nil {
 		theErr := exception.NewUnprocessableEntityError("invalid json body")
 		c.JSON(theErr.Status(), theErr)
 		return
 	}
-	// sample := personCommand.GetImmutable()
+	// sample := personcommand.GetImmutable()
 	// fmt.Printf("%+v", sample)
 
-	c.JSON(http.StatusOK, personCommand)
+	c.JSON(http.StatusOK, personcommand)
 }
 
 // DeletePerson func deletes a person

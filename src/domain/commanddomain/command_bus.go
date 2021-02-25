@@ -1,4 +1,4 @@
-package commandDomain
+package commanddomain
 
 type CommandBus interface {
 	dispatch() string

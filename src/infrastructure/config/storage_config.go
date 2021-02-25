@@ -1,7 +1,7 @@
 package config
 
 import (
-	"golang_persons-api/src/infrastructure/config/storageConfig/mysqlStorage"
+	"golang_persons-api/src/infrastructure/config/storageconfig/mysqlstorage"
 	"os"
 )
 
@@ -23,13 +23,13 @@ func GetSQLDataConnection() SQLDataConnectionContract {
 
 func getMySQLDataConnection() SQLDataConnectionContract {
 
-	dataConnection := mysqlStorage.NewMySQLDataConnection(map[string]string{
-		"driver":   os.Getenv(mysqlStorage.EnvDriver),
-		"username": os.Getenv(mysqlStorage.EnvUsername),
-		"password": os.Getenv(mysqlStorage.EnvPassword),
-		"host":     os.Getenv(mysqlStorage.EnvHost),
-		"database": os.Getenv(mysqlStorage.EnvDatabase),
-		"port":     os.Getenv(mysqlStorage.EnvPort),
+	dataConnection := mysqlstorage.NewMySQLDataConnection(map[string]string{
+		"driver":   os.Getenv(mysqlstorage.EnvDriver),
+		"username": os.Getenv(mysqlstorage.EnvUsername),
+		"password": os.Getenv(mysqlstorage.EnvPassword),
+		"host":     os.Getenv(mysqlstorage.EnvHost),
+		"database": os.Getenv(mysqlstorage.EnvDatabase),
+		"port":     os.Getenv(mysqlstorage.EnvPort),
 	})
 	return dataConnection
 }

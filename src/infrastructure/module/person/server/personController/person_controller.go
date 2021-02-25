@@ -1,9 +1,9 @@
-package person_controller
+package personController
 
 import (
 	"fmt"
-	"golang_persons-api/src/application/person/person_command"
-	"golang_persons-api/src/application/person/person_query"
+	"golang_persons-api/src/application/person/personCommand"
+	"golang_persons-api/src/application/person/personQuery"
 	"golang_persons-api/src/infrastructure/exception"
 	"net/http"
 	"strconv"
@@ -23,7 +23,7 @@ type PersonController struct {
 // GetPerson func gets person by id
 func GetPerson(c *gin.Context) {
 
-	personQuery := person_query.FindPersonQuery{ID: c.Param("person_id")}
+	personQuery := personQuery.FindPersonQuery{ID: c.Param("person_id")}
 
 	sample := personQuery.GetImmutable()
 	fmt.Printf("%+v", sample)
@@ -44,7 +44,7 @@ func GetAllPersons(c *gin.Context) {
 
 // CreatePerson func creates a new person
 func CreatePerson(c *gin.Context) {
-	var personCommand person_command.CreatePersonCommand
+	var personCommand personCommand.CreatePersonCommand
 	if err := c.ShouldBindJSON(&personCommand); err != nil {
 		theErr := exception.NewUnprocessableEntityError("invalid json body")
 		c.JSON(theErr.Status(), theErr)
@@ -66,7 +66,7 @@ func CreatePerson(c *gin.Context) {
 
 // UpdatePerson func updates a person
 func UpdatePerson(c *gin.Context) {
-	var personCommand person_command.UpdatePersonCommand
+	var personCommand personCommand.UpdatePersonCommand
 	if err := c.ShouldBindJSON(&personCommand); err != nil {
 		theErr := exception.NewUnprocessableEntityError("invalid json body")
 		c.JSON(theErr.Status(), theErr)

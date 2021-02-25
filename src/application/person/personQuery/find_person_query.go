@@ -1,4 +1,4 @@
-package person_query
+package personQuery
 
 // FindPersonQuery represents a person to find
 type FindPersonQuery struct {

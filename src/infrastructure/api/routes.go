@@ -1,7 +1,7 @@
 package api
 
 import (
-	"golang_persons-api/src/infrastructure/person/person_router"
+	"golang_persons-api/src/infrastructure/module/person/server/personRouter"
 
 	"github.com/gin-gonic/gin"
 
@@ -15,5 +15,5 @@ func routes() {
 		c.String(http.StatusOK, "working")
 	})
 
-	person_router.HandleRoutes(Router)
+	personRouter.HandleRoutes(Router)
 }

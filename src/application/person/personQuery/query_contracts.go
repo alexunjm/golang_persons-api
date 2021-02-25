@@ -1,4 +1,4 @@
-package person_query
+package personQuery
 
 // FindPersonQueryContract defines query getter methods
 type FindPersonQueryContract interface {

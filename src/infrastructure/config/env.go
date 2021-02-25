@@ -1,34 +1,30 @@
 package config
 
 import (
-	"os"
+	"fmt"
 )
 
-var app App
-
-type App struct {
-	MySLQEnv MySQL
-}
-
-type MySQL struct {
-	driver   string
-	username string
-	password string
-	host     string
-	database string
-	port     string
-}
-
+// LoadAppEnv creates ApplicationConfig instance
 func LoadAppEnv() {
-	app = App{
-		MySLQEnv: MySQL{
-			driver:   os.Getenv("DRIVER"),
-			username: os.Getenv("USERNAME"),
-			password: os.Getenv("PASSWORD"),
-			host:     os.Getenv("HOST"),
-			database: os.Getenv("DATABASE"),
-			port:     os.Getenv("PORT"),
-		},
-	}
 
+	ApplicationConfig = app{
+		appEnv: GetApplicationConfig(),
+		sqlEnv: GetSQLDataConnection(),
+	}
+}
+
+type app struct {
+	appEnv APPConfigContract
+	sqlEnv SQLDataConnectionContract
+}
+
+// ApplicationConfig handles all infrastructure default config
+var ApplicationConfig app
+
+func (config *app) GetAPIPort() string {
+	return fmt.Sprintf(":%v", config.appEnv.Port())
+}
+
+func (config *app) GetSQLConfig() SQLDataConnectionContract {
+	return config.sqlEnv
 }

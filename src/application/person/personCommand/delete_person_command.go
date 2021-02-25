@@ -1,4 +1,4 @@
-package person_command
+package personCommand
 
 // DeletePersonCommand represents a person to delete
 type DeletePersonCommand struct {

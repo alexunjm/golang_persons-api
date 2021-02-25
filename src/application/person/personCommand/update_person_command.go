@@ -1,4 +1,4 @@
-package person_command
+package personCommand
 
 // UpdatePersonCommand represents new person to update
 type UpdatePersonCommand struct {

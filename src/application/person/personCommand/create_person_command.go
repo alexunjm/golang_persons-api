@@ -1,4 +1,4 @@
-package person_command
+package personCommand
 
 // CreatePersonCommand represents new person to create
 type CreatePersonCommand struct {

@@ -1,4 +1,4 @@
-package person_command
+package personCommand
 
 // CreatePersonCommandContract defines command getter methods
 type CreatePersonCommandContract interface {

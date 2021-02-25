@@ -20,11 +20,14 @@ func init() {
 	}
 }
 
-// StartApp func starts the gin gonic api
-func StartApp() {
+// Run func starts the gin gonic api
+func Run() {
+	// loads default config and env config
 	config.LoadAppEnv()
 
+	// define API routes
 	routes()
 
-	Router.Run(":8080")
+	// run on configured port
+	Router.Run(config.ApplicationConfig.GetAPIPort())
 }

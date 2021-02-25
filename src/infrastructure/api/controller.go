@@ -1,5 +1,6 @@
 package api
 
+/*
 type BusContract interface {
 	dispatch(command CommandContract)
 }
@@ -37,3 +38,4 @@ type SyncCommandBus struct {
 func (syncCB SyncCommandBus) dispatch(command CommandContract) {
 	syncCB.Bus.dispatch(command)
 }
+*/

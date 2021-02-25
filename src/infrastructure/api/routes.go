@@ -12,7 +12,7 @@ func routes() {
 
 	// handle default index response
 	Router.GET("/", func(c *gin.Context) {
-		c.String(http.StatusOK, "working")
+		c.String(http.StatusOK, "it's working!!")
 	})
 
 	personrouter.HandleRoutes(Router)

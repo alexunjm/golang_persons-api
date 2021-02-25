@@ -1,7 +1,13 @@
 package main
 
-import "golang_persons-api/src/infrastructure/api"
+import (
+	"golang_persons-api/src/infrastructure/api"
+	"log"
+)
 
 func main() {
-	api.Run()
+
+	if err := api.Run(); err != nil {
+		log.Fatal(err)
+	}
 }

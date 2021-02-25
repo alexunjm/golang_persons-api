@@ -7,12 +7,12 @@ import (
 
 // SQLDataConnectionContract interface for sql data connection
 type SQLDataConnectionContract interface {
-	Drive() string
+	Driver() string
 	Username() string
 	Password() string
 	Host() string
 	Database() string
-	Port() string
+	Port() int
 }
 
 // GetSQLDataConnection returns data connection for sql engine

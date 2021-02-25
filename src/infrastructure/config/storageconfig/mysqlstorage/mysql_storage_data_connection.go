@@ -1,5 +1,11 @@
 package mysqlstorage
 
+import (
+	exception "golang_persons-api/src/infrastructure/httperror"
+	"strconv"
+)
+
+// mysql env variables
 const (
 	EnvDriver   = "MYSQL_DRIVER"
 	EnvUsername = "MYSQL_USERNAME"
@@ -30,8 +36,8 @@ type MySQLDataConnection struct {
 	port     string
 }
 
-// Drive gets drive string value
-func (msdc MySQLDataConnection) Drive() string {
+// Driver gets drive string value
+func (msdc MySQLDataConnection) Driver() string {
 	return msdc.driver
 }
 
@@ -56,6 +62,16 @@ func (msdc MySQLDataConnection) Database() string {
 }
 
 // Port gets port string value
-func (msdc MySQLDataConnection) Port() string {
-	return msdc.port
+func (msdc MySQLDataConnection) Port() int {
+	port, _ := msdc.intPort()
+	return port
+}
+
+// Port gets port string value
+func (msdc MySQLDataConnection) intPort() (int, error) {
+	port, err := strconv.Atoi(msdc.port)
+	if err != nil {
+		return 0, exception.NewInternalServerError("Port env variable should be a number")
+	}
+	return port, nil
 }

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"golang_persons-api/src/application/person/personcommand"
 	"golang_persons-api/src/application/person/personquery"
-	"golang_persons-api/src/infrastructure/exception"
+	exception "golang_persons-api/src/infrastructure/httperror"
 	"net/http"
 	"strconv"
 

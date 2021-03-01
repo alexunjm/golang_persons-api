@@ -1,17 +1,13 @@
 package api
 
 import (
+	"context"
 	"fmt"
-	"golang_persons-api/src/infrastructure/config"
+	"golang_persons-api/src/infrastructure/config/env"
+	"golang_persons-api/src/infrastructure/config/server"
 	"log"
 
-	"github.com/gin-gonic/gin"
 	goDotEnv "github.com/joho/godotenv"
-)
-
-var (
-	// Router handle all of URLs and mapping related
-	Router = gin.Default()
 )
 
 func init() {
@@ -22,7 +18,7 @@ func init() {
 }
 
 // Run func starts the gin api
-func Run() error {
+func Run() {
 
 	defer func() {
 		if r := recover(); r != nil {
@@ -31,20 +27,8 @@ func Run() error {
 		}
 	}()
 
-	var err error
 	// loads default config and env config
-	err = config.LoadAppEnv()
-	if err != nil {
-		return err
-	}
+	envVariables := env.LoadAppEnv()
 
-	// define API routes
-	routes()
-
-	// run on configured port
-	err = Router.Run(config.APIPort)
-	if err != nil {
-		return err
-	}
-	return nil
+	server.New(context.Background(), envVariables)
 }

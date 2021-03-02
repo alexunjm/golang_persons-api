@@ -1,7 +1,7 @@
 package personrouter
 
 import (
-	"golang_persons-api/src/infrastructure/module/person/server/personcontroller"
+	"golang_persons-api/src/infrastructure/module/person/personcontroller"
 
 	"github.com/gin-gonic/gin"
 )

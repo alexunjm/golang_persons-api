@@ -3,13 +3,13 @@ package server
 import (
 	"context"
 	"database/sql"
+	"golang_persons-api/src/application/dependencyinjection"
 	"golang_persons-api/src/application/inmemory"
 	"golang_persons-api/src/domain/person/command"
 	"golang_persons-api/src/infrastructure/config/env"
-	"golang_persons-api/src/infrastructure/config/server/dependencyinjection"
-	"golang_persons-api/src/infrastructure/config/storageconfig/mysqlstorage"
-	"golang_persons-api/src/infrastructure/module/person/server/personcontroller"
-	"golang_persons-api/src/infrastructure/module/person/server/personrouter"
+	"golang_persons-api/src/infrastructure/config/storage/mysqlstorage"
+	"golang_persons-api/src/infrastructure/module/person/personcontroller"
+	"golang_persons-api/src/infrastructure/module/person/personrouter"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -33,7 +33,12 @@ func New(ctx context.Context, envVariables env.EnvVariables) Server {
 		commandBus: nil,
 	}
 
-	srv.registerRoutes()
+	srv.registerIndexRoute()
+
+	commandBus := inmemory.NewCommandBus()
+	srv.registerControllers(commandBus)
+
+	dependencyinjection.RegisterCommandHandlers(commandBus)
 
 	return srv
 }
@@ -44,15 +49,16 @@ func (s *Server) Start(APIPort string) {
 	s.router.Run(APIPort)
 }
 
-func (s *Server) registerRoutes() {
+func (s *Server) registerIndexRoute() {
 
 	// handle default index response
 	s.router.GET("/", func(c *gin.Context) {
 		c.String(http.StatusOK, "it's working!!")
 	})
 
-	commandBus := inmemory.NewCommandBus()
-	dependencyinjection.RegisterCommandHandlers(commandBus)
+}
+
+func (s *Server) registerControllers(commandBus command.Bus) {
 
 	personController := personcontroller.NewPersonController(commandBus)
 	personrouter.HandleRoutes(s.router, personController)

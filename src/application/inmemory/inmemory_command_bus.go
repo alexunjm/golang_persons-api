@@ -5,16 +5,16 @@ import (
 	"golang_persons-api/src/domain/person/command"
 )
 
+// CommandBus is a bus for commands, dispatched from request controller
+type CommandBus struct {
+	handlerMap map[command.Type]command.Handler
+}
+
 // NewCommandBus creates a new command bus
 func NewCommandBus() command.Bus {
 	return CommandBus{
 		handlerMap: make(map[command.Type]command.Handler),
 	}
-}
-
-// CommandBus is a bus for commands, dispatched from request controller
-type CommandBus struct {
-	handlerMap map[command.Type]command.Handler
 }
 
 // Register adds handler for type commandType

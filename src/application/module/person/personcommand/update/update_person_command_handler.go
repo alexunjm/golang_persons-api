@@ -6,26 +6,25 @@ import (
 )
 
 // NewUpdatePersonCommandHandler initializes a new UpdatePersonCommandHandler.
-func NewUpdatePersonCommandHandler(creator PersonUpdater) UpdatePersonCommandHandler {
-	return UpdatePersonCommandHandler{
-		creator: creator,
-	}
+func NewUpdatePersonCommandHandler(updater PersonUpdater) UpdatePersonCommandHandler {
+	return UpdatePersonCommandHandler{updater}
 }
 
 // UpdatePersonCommandHandler is a handler for PersonCommand
 type UpdatePersonCommandHandler struct {
-	creator PersonUpdater
+	updater PersonUpdater
 }
 
 // Handle method of command
 func (h UpdatePersonCommandHandler) Handle(command command.Command) {
 	// casting command to UpdatePersonCommand
-	personCommand := command.(UpdatePersonCommand)
+	updatePersonCommand := command.(UpdatePersonCommand)
 
-	id := person.NewPersonID(personCommand.ID)
-	firstname := person.NewPersonFirstname(personCommand.Firstname)
-	lastname := person.NewPersonLastname(personCommand.Lastname)
-	age := person.NewPersonAge(personCommand.Age)
+	srcID := person.NewPersonID(updatePersonCommand.srcID)
+	id := person.NewPersonID(updatePersonCommand.ID)
+	firstname := person.NewPersonFirstname(updatePersonCommand.Firstname)
+	lastname := person.NewPersonLastname(updatePersonCommand.Lastname)
+	age := person.NewPersonAge(updatePersonCommand.Age)
 
-	h.creator.Update(id, firstname, lastname, age)
+	h.updater.Update(srcID, id, firstname, lastname, age)
 }

@@ -9,6 +9,7 @@ var (
 
 // UpdatePersonCommand is a DTO for Person to update
 type UpdatePersonCommand struct {
+	srcID     string `json:"src_id"`
 	ID        string `json:"id"`
 	Firstname string `json:"firstname"`
 	Lastname  string `json:"lastname"`

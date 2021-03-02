@@ -20,12 +20,12 @@ type CreatePersonCommandHandler struct {
 // Handle method of command
 func (h CreatePersonCommandHandler) Handle(command command.Command) {
 	// casting command to CreatePersonCommand
-	personCommand := command.(CreatePersonCommand)
+	createPersonCommand := command.(CreatePersonCommand)
 
-	id := person.NewPersonID(personCommand.ID)
-	firstname := person.NewPersonFirstname(personCommand.Firstname)
-	lastname := person.NewPersonLastname(personCommand.Lastname)
-	age := person.NewPersonAge(personCommand.Age)
+	id := person.NewPersonID(createPersonCommand.ID)
+	firstname := person.NewPersonFirstname(createPersonCommand.Firstname)
+	lastname := person.NewPersonLastname(createPersonCommand.Lastname)
+	age := person.NewPersonAge(createPersonCommand.Age)
 
 	h.creator.Create(id, firstname, lastname, age)
 }

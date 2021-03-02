@@ -1,9 +1,13 @@
 package person
 
-type PersonId struct {
+type PersonID struct {
 	id string
 }
 
-func (p PersonId) Id() string {
+func (p PersonID) Id() string {
 	return p.id
+}
+
+func NewPersonID(id string) PersonID {
+	return PersonID{id}
 }

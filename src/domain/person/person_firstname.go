@@ -7,3 +7,7 @@ type PersonFirstname struct {
 func (p PersonFirstname) Firstname() string {
 	return p.firstname
 }
+
+func NewPersonFirstname(firstname string) PersonFirstname {
+	return PersonFirstname{firstname}
+}

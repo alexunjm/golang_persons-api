@@ -22,7 +22,7 @@ func Run() {
 
 	defer func() {
 		if r := recover(); r != nil {
-			fmt.Println("No handled error")
+			fmt.Println("\n ----- No handled error -----")
 			log.Fatal(r)
 		}
 	}()
@@ -30,5 +30,6 @@ func Run() {
 	// loads default config and env config
 	envVariables := env.LoadAppEnv()
 
-	server.New(context.Background(), envVariables)
+	srv := server.New(context.Background(), envVariables)
+	srv.Start(envVariables.GetAPIPort())
 }

@@ -7,7 +7,7 @@ type CreateCommandHandler struct {
 }
 
 type PersonDTO interface {
-	ID() person.PersonId
+	ID() person.PersonID
 	Firstname() person.PersonFirstname
 	Lastname() person.PersonLastname
 	Age() person.PersonAge

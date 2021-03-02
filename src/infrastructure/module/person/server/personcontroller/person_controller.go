@@ -3,6 +3,7 @@ package personcontroller
 import (
 	"fmt"
 	"golang_persons-api/src/application/module/person/personcommand/create"
+	"golang_persons-api/src/application/module/person/personcommand/update"
 	"golang_persons-api/src/application/module/person/personquery"
 	"golang_persons-api/src/domain/person/command"
 	exception "golang_persons-api/src/infrastructure/httperror"
@@ -37,8 +38,6 @@ func (ctrl *PersonController) GetPerson(c *gin.Context) {
 	fmt.Printf("id: %v",
 		sample.GetID(),
 	)
-	// // dispatch command
-	// services.CommandBus.dispatch(&personquery)
 
 	c.JSON(http.StatusOK, personquery)
 }
@@ -70,22 +69,12 @@ func (ctrl *PersonController) UpdatePerson(c *gin.Context) {
 		c.JSON(theErr.Status(), theErr)
 		return
 	}
-	// sample := personcommand.GetImmutable()
-	// fmt.Printf("%+v", sample)
+	ctrl.commandBus.Dispatch(updatePersonCommand)
 
-	c.JSON(http.StatusOK, personcommand)
+	c.JSON(http.StatusOK, updatePersonCommand)
 }
 
 // DeletePerson func deletes a person
 func (ctrl *PersonController) DeletePerson(c *gin.Context) {
 	c.JSON(http.StatusOK, message)
 }
-
-// func getMessageID(personIDParam string) (int64, exception.MessageErr) {
-
-// 	personID, personErr := strconv.ParseInt(personIDParam, 10, 64)
-// 	if personErr != nil {
-// 		return 0, exception.NewBadRequestError("person id should be a number")
-// 	}
-// 	return personID, nil
-// }

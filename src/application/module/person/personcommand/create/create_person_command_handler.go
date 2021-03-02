@@ -1,21 +1,31 @@
 package create
 
-import "golang_persons-api/src/domain/person/command"
+import (
+	"golang_persons-api/src/domain/person"
+	"golang_persons-api/src/domain/person/command"
+)
 
 // NewCreatePersonCommandHandler initializes a new CreatePersonCommandHandler.
-func NewCreatePersonCommandHandler( /* service CreatePersonService */ ) CreatePersonCommandHandler {
+func NewCreatePersonCommandHandler(creator PersonCreator) CreatePersonCommandHandler {
 	return CreatePersonCommandHandler{
-		// service: service,
+		creator: creator,
 	}
 }
 
+// CreatePersonCommandHandler is a handler for PersonCommand
 type CreatePersonCommandHandler struct {
-	service CreatePersonService
+	creator PersonCreator
 }
 
-func (CreatePersonCommandHandler) Handle(command command.Command) error {
-	return nil
-}
+// Handle method of command
+func (h CreatePersonCommandHandler) Handle(command command.Command) {
+	// casting command to CreatePersonCommand
+	personCommand := command.(CreatePersonCommand)
 
-type CreatePersonService struct {
+	id := person.NewPersonID(personCommand.ID)
+	firstname := person.NewPersonFirstname(personCommand.Firstname)
+	lastname := person.NewPersonLastname(personCommand.Lastname)
+	age := person.NewPersonAge(personCommand.Age)
+
+	h.creator.Create(id, firstname, lastname, age)
 }

@@ -1,9 +1,13 @@
 package person
 
 type PersonAge struct {
-	age string
+	age int
 }
 
-func (p PersonAge) Age() string {
+func (p PersonAge) Age() int {
 	return p.age
+}
+
+func NewPersonAge(firstname int) PersonAge {
+	return PersonAge{firstname}
 }

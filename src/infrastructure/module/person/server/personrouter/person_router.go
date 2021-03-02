@@ -1,19 +1,17 @@
 package personrouter
 
 import (
-	"golang_persons-api/src/domain/person/command"
 	"golang_persons-api/src/infrastructure/module/person/server/personcontroller"
 
 	"github.com/gin-gonic/gin"
 )
 
-func HandleRoutes(Router *gin.Engine, commandBus command.Bus) {
+// HandleRoutes handles person routes
+func HandleRoutes(router *gin.Engine, controller *personcontroller.PersonController) {
 
-	ctrl := personcontroller.NewPersonController(commandBus)
-
-	Router.GET("/persons/:person_id", ctrl.GetPerson)
-	Router.GET("/persons", ctrl.GetAllPersons)
-	Router.POST("/persons", ctrl.CreatePerson)
-	Router.PUT("/persons/:person_id", ctrl.UpdatePerson)
-	Router.DELETE("/persons/:person_id", ctrl.DeletePerson)
+	router.GET("/persons/:person_id", controller.GetPerson)
+	router.GET("/persons", controller.GetAllPersons)
+	router.POST("/persons", controller.CreatePerson)
+	router.PUT("/persons/:person_id", controller.UpdatePerson)
+	router.DELETE("/persons/:person_id", controller.DeletePerson)
 }

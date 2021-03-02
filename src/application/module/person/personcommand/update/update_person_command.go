@@ -1,14 +1,14 @@
-package create
+package update
 
 import "golang_persons-api/src/domain/person/command"
 
 var (
-	// PersonCommandType is a type for creating persons command
-	PersonCommandType command.Type = "CREATE_PERSON"
+	// PersonCommandType is a type for updating persons command
+	PersonCommandType command.Type = "UPDATE_PERSON"
 )
 
-// CreatePersonCommand is a DTO for Person to update
-type CreatePersonCommand struct {
+// UpdatePersonCommand is a DTO for Person to update
+type UpdatePersonCommand struct {
 	ID        string `json:"id"`
 	Firstname string `json:"firstname"`
 	Lastname  string `json:"lastname"`
@@ -16,6 +16,6 @@ type CreatePersonCommand struct {
 }
 
 // Type returns a command type string
-func (CreatePersonCommand) Type() command.Type {
+func (UpdatePersonCommand) Type() command.Type {
 	return PersonCommandType
 }

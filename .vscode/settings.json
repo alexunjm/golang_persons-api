@@ -1,7 +1,10 @@
 {
     "cSpell.words": [
         "deps",
+        "godotenv",
         "gonic",
+        "inmemory",
+        "joho",
         "mysqlstorage"
     ]
 }

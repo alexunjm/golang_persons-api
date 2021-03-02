@@ -3,6 +3,8 @@ package server
 import (
 	"context"
 	"database/sql"
+	"golang_persons-api/src/application/inmemory"
+	"golang_persons-api/src/application/module/person/personcommand/create"
 	"golang_persons-api/src/domain/person/command"
 	"golang_persons-api/src/infrastructure/config/env"
 	"golang_persons-api/src/infrastructure/config/storageconfig/mysqlstorage"
@@ -43,8 +45,10 @@ func (s *Server) registerRoutes() {
 		c.String(http.StatusOK, "it's working!!")
 	})
 
-	var commandBus command.Bus
-	//TODO: create commandbus
+	var commandBus command.Bus = inmemory.NewCommandBus()
+
+	handler := create.NewCreatePersonCommandHandler()
+	commandBus.Register(create.PersonCommandType, handler)
 
 	personrouter.HandleRoutes(s.Router, commandBus)
 

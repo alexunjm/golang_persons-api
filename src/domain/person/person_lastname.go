@@ -1,13 +1,29 @@
 package person
 
+import (
+	"errors"
+	"strings"
+)
+
+// ErrEmptyPersonLastname error for invalid person id
+var ErrEmptyPersonLastname = errors.New("the field person lastname can not be empty")
+
+// PersonLastname value object pattern, for person lastname type
 type PersonLastname struct {
-	lastname string
+	value string
 }
 
-func (p PersonLastname) Lastname() string {
-	return p.lastname
+// NewPersonLastname initializes a new PersonLastname
+func NewPersonLastname(value string) (PersonLastname, error) {
+	value = strings.Trim(value, " ")
+	if value == "" {
+		return PersonLastname{}, ErrEmptyPersonLastname
+	}
+	return PersonLastname{value}, nil
 }
 
-func NewPersonLastname(firstname string) PersonLastname {
-	return PersonLastname{firstname}
+// String is a toString method.
+// Converts the PersonLastname into string
+func (p PersonLastname) String() string {
+	return p.value
 }

@@ -48,7 +48,6 @@ func (envVar EnvVariables) GetAPIPort() string {
 	port, err := strconv.Atoi(envVar.envAPIPort)
 
 	if err != nil {
-		// return "", err
 		panic(err)
 	}
 

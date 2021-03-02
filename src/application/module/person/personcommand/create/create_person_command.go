@@ -9,10 +9,10 @@ var (
 
 // CreatePersonCommand is a DTO for Person to update
 type CreatePersonCommand struct {
-	ID        string `json:"id"`
-	Firstname string `json:"firstname"`
-	Lastname  string `json:"lastname"`
-	Age       int    `json:"age"`
+	ID        string `json:"id" binding:"required"`
+	Firstname string `json:"firstname" binding:"required"`
+	Lastname  string `json:"lastname" binding:"required"`
+	Age       int    `json:"age" binding:"required"`
 }
 
 // Type returns a command type string

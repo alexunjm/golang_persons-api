@@ -2,7 +2,6 @@ package update
 
 import (
 	"fmt"
-	"golang_persons-api/src/domain/person"
 	"golang_persons-api/src/domain/person/command"
 )
 
@@ -17,18 +16,17 @@ type UpdatePersonCommandHandler struct {
 }
 
 // Handle method of command
-func (h UpdatePersonCommandHandler) Handle(command command.Command) {
+func (h UpdatePersonCommandHandler) Handle(command command.Command) error {
 	// casting command to UpdatePersonCommand
 	updatePersonCommand, ok := command.(UpdatePersonCommand)
 	if !ok {
-		panic(fmt.Sprintf("unexpected command updatePersonCommand; found: %+v", command))
+		return fmt.Errorf("unexpected command UpdatePersonCommand; found: %+v", command)
 	}
 
-	srcID := person.NewPersonID(updatePersonCommand.srcID)
-	id := person.NewPersonID(updatePersonCommand.ID)
-	firstname := person.NewPersonFirstname(updatePersonCommand.Firstname)
-	lastname := person.NewPersonLastname(updatePersonCommand.Lastname)
-	age := person.NewPersonAge(updatePersonCommand.Age)
-
-	h.service.Update(srcID, id, firstname, lastname, age)
+	return h.service.Update(
+		updatePersonCommand.ID,
+		updatePersonCommand.Firstname,
+		updatePersonCommand.Lastname,
+		updatePersonCommand.Age,
+	)
 }

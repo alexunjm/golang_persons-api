@@ -16,7 +16,11 @@ func NewPersonUpdater(repository domainpersonrepository.PersonRepository) Person
 }
 
 // Update database action repository call
-func (c PersonUpdaterService) Update(srcPersonID person.PersonID, id person.PersonID, firstname person.PersonFirstname, lastname person.PersonLastname, age person.PersonAge) {
-	personModel := person.NewPersonModel(id, firstname, lastname, age)
-	c.repository.Update(srcPersonID, personModel)
+func (c PersonUpdaterService) Update(id string, firstname string, lastname string, age int) error {
+	personModel, err := person.NewPersonModel(id, firstname, lastname, age)
+	if err != nil {
+		return err
+	}
+	c.repository.Update(personModel)
+	return nil
 }

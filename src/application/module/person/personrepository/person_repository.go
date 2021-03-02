@@ -21,7 +21,7 @@ func (PersonRepository) Save(person person.Person) {
 }
 
 // Update database action
-func (PersonRepository) Update(personID person.PersonID, person person.Person) {
+func (PersonRepository) Update(person person.Person) {
 	// TODO: update to db
-	fmt.Printf("updating person with id <%+v>:\n %+v", personID, person)
+	fmt.Printf("updating person :\n %+v", person)
 }

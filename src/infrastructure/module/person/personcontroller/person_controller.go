@@ -54,6 +54,7 @@ func (ctrl *PersonController) CreatePerson(c *gin.Context) {
 
 	var createPersonCommand create.CreatePersonCommand
 	if err := c.ShouldBindJSON(&createPersonCommand); err != nil {
+		// theErr := exception.NewUnprocessableEntityError(err.Error())
 		theErr := exception.NewUnprocessableEntityError("invalid json body")
 		c.JSON(theErr.Status(), theErr)
 		return
@@ -69,6 +70,7 @@ func (ctrl *PersonController) CreatePerson(c *gin.Context) {
 func (ctrl *PersonController) UpdatePerson(c *gin.Context) {
 	var updatePersonCommand update.UpdatePersonCommand
 	if err := c.ShouldBindJSON(&updatePersonCommand); err != nil {
+		// theErr := exception.NewUnprocessableEntityError(err.Error())
 		theErr := exception.NewUnprocessableEntityError("invalid json body")
 		c.JSON(theErr.Status(), theErr)
 		return

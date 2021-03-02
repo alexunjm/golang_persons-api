@@ -2,7 +2,6 @@ package create
 
 import (
 	"fmt"
-	"golang_persons-api/src/domain/person"
 	"golang_persons-api/src/domain/person/command"
 )
 
@@ -17,17 +16,17 @@ type CreatePersonCommandHandler struct {
 }
 
 // Handle method of command
-func (h CreatePersonCommandHandler) Handle(command command.Command) {
+func (h CreatePersonCommandHandler) Handle(command command.Command) error {
 	// casting command to CreatePersonCommand
 	createPersonCommand, ok := command.(CreatePersonCommand)
 	if !ok {
-		panic(fmt.Sprintf("unexpected command CreatePersonCommand; found: %+v", command))
+		return fmt.Errorf("unexpected command CreatePersonCommand; found: %+v", command)
 	}
 
-	id := person.NewPersonID(createPersonCommand.ID)
-	firstname := person.NewPersonFirstname(createPersonCommand.Firstname)
-	lastname := person.NewPersonLastname(createPersonCommand.Lastname)
-	age := person.NewPersonAge(createPersonCommand.Age)
-
-	h.service.Create(id, firstname, lastname, age)
+	return h.service.Create(
+		createPersonCommand.ID,
+		createPersonCommand.Firstname,
+		createPersonCommand.Lastname,
+		createPersonCommand.Age,
+	)
 }

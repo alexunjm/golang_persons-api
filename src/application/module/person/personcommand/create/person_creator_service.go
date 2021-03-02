@@ -18,7 +18,12 @@ func NewPersonCreator(repository domainpersonrepository.PersonRepository) Person
 }
 
 // Create database action repository call
-func (c PersonCreatorService) Create(id person.PersonID, firstname person.PersonFirstname, lastname person.PersonLastname, age person.PersonAge) {
-	personModel := person.NewPersonModel(id, firstname, lastname, age)
+func (c PersonCreatorService) Create(id string, firstname string, lastname string, age int) error {
+
+	personModel, err := person.NewPersonModel(id, firstname, lastname, age)
+	if err != nil {
+		return err
+	}
 	c.repository.Save(personModel)
+	return nil
 }

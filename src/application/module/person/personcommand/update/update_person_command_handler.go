@@ -1,24 +1,28 @@
 package update
 
 import (
+	"fmt"
 	"golang_persons-api/src/domain/person"
 	"golang_persons-api/src/domain/person/command"
 )
 
 // NewUpdatePersonCommandHandler initializes a new UpdatePersonCommandHandler.
-func NewUpdatePersonCommandHandler(updater PersonUpdater) UpdatePersonCommandHandler {
-	return UpdatePersonCommandHandler{updater}
+func NewUpdatePersonCommandHandler(service PersonUpdaterService) UpdatePersonCommandHandler {
+	return UpdatePersonCommandHandler{service}
 }
 
 // UpdatePersonCommandHandler is a handler for PersonCommand
 type UpdatePersonCommandHandler struct {
-	updater PersonUpdater
+	service PersonUpdaterService
 }
 
 // Handle method of command
 func (h UpdatePersonCommandHandler) Handle(command command.Command) {
 	// casting command to UpdatePersonCommand
-	updatePersonCommand := command.(UpdatePersonCommand)
+	updatePersonCommand, ok := command.(UpdatePersonCommand)
+	if !ok {
+		panic(fmt.Sprintf("unexpected command updatePersonCommand; found: %+v", command))
+	}
 
 	srcID := person.NewPersonID(updatePersonCommand.srcID)
 	id := person.NewPersonID(updatePersonCommand.ID)
@@ -26,5 +30,5 @@ func (h UpdatePersonCommandHandler) Handle(command command.Command) {
 	lastname := person.NewPersonLastname(updatePersonCommand.Lastname)
 	age := person.NewPersonAge(updatePersonCommand.Age)
 
-	h.updater.Update(srcID, id, firstname, lastname, age)
+	h.service.Update(srcID, id, firstname, lastname, age)
 }

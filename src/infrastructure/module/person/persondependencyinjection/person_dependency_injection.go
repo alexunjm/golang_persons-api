@@ -3,6 +3,7 @@ package persondependencyinjection
 import (
 	"database/sql"
 	"golang_persons-api/src/application/module/person/personcommand/create"
+	"golang_persons-api/src/application/module/person/personcommand/delete"
 	"golang_persons-api/src/application/module/person/personcommand/update"
 	"golang_persons-api/src/domain/person/command"
 	"golang_persons-api/src/infrastructure/module/person/personrepository"
@@ -21,4 +22,8 @@ func RegisterPersonCommandHandlers(bus command.Bus, db *sql.DB, dbTimeout time.D
 	personUpdater := update.NewPersonUpdater(personRepository)
 	updatePersonCommandHandler := update.NewUpdatePersonCommandHandler(personUpdater)
 	bus.Register(update.PersonCommandType, updatePersonCommandHandler)
+
+	personDeleter := delete.NewPersonDeleter(personRepository)
+	deletePersonCommandHandler := delete.NewDeletePersonCommandHandler(personDeleter)
+	bus.Register(delete.PersonCommandType, deletePersonCommandHandler)
 }

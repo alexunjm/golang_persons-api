@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"golang_persons-api/src/application/module/person/personcommand/create"
+	"golang_persons-api/src/application/module/person/personcommand/delete"
 	"golang_persons-api/src/application/module/person/personcommand/update"
 	"golang_persons-api/src/application/module/person/personquery"
 	"golang_persons-api/src/domain/person"
@@ -62,7 +63,45 @@ func (ctrl *PersonController) CreatePerson(c *gin.Context) {
 		return
 	}
 
-	if err := ctrl.commandBus.Dispatch(c, createPersonCommand); err != nil {
+	handleResponse(
+		c,
+		ctrl.commandBus.Dispatch(c, createPersonCommand),
+		httpresponses.NewHTTPCreatedResponse("Person created successfully"),
+	)
+}
+
+// UpdatePerson func updates a person
+func (ctrl *PersonController) UpdatePerson(c *gin.Context) {
+	var updatePersonCommand update.UpdatePersonCommand
+	if err := c.ShouldBindJSON(&updatePersonCommand); err != nil {
+		// theErr := exception.NewUnprocessableEntityError(err.Error())
+		theErr := exception.NewUnprocessableEntityError("invalid json body")
+		c.JSON(theErr.Status(), theErr)
+		return
+	}
+	updatePersonCommand.ID = c.Param("person_id")
+
+	handleResponse(
+		c,
+		ctrl.commandBus.Dispatch(c, updatePersonCommand),
+		httpresponses.NewHTTPCreatedResponse("Person updated successfully"),
+	)
+}
+
+// DeletePerson func deletes a person
+func (ctrl *PersonController) DeletePerson(c *gin.Context) {
+	deletePersonCommand := delete.DeletePersonCommand{ID: c.Param("person_id")}
+
+	handleResponse(
+		c,
+		ctrl.commandBus.Dispatch(c, deletePersonCommand),
+		httpresponses.NewHTTPCreatedResponse("Person deleted successfully"),
+	)
+}
+
+func handleResponse(c *gin.Context, err error, response httpresponses.Message) {
+
+	if err != nil {
 
 		switch {
 
@@ -85,26 +124,5 @@ func (ctrl *PersonController) CreatePerson(c *gin.Context) {
 		}
 	}
 
-	response := httpresponses.NewHTTPCreatedResponse("Person created successfully")
 	c.JSON(response.Status(), response)
-}
-
-// UpdatePerson func updates a person
-func (ctrl *PersonController) UpdatePerson(c *gin.Context) {
-	var updatePersonCommand update.UpdatePersonCommand
-	if err := c.ShouldBindJSON(&updatePersonCommand); err != nil {
-		// theErr := exception.NewUnprocessableEntityError(err.Error())
-		theErr := exception.NewUnprocessableEntityError("invalid json body")
-		c.JSON(theErr.Status(), theErr)
-		return
-	}
-	ctrl.commandBus.Dispatch(c, updatePersonCommand)
-
-	response := httpresponses.NewHTTPCreatedResponse("Person updated successfully")
-	c.JSON(response.Status(), response)
-}
-
-// DeletePerson func deletes a person
-func (ctrl *PersonController) DeletePerson(c *gin.Context) {
-	c.JSON(http.StatusOK, message)
 }

@@ -9,4 +9,5 @@ import (
 type PersonRepository interface {
 	Save(ctx context.Context, person person.Person) error
 	Update(ctx context.Context, person person.Person) error
+	Delete(ctx context.Context, personID person.PersonID) error
 }

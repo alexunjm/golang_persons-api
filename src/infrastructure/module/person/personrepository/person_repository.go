@@ -26,21 +26,23 @@ func NewPersonRepository(db *sql.DB, dbTimeout time.Duration) *PersonRepository 
 
 // Save database action
 func (r PersonRepository) Save(ctx context.Context, person person.Person) error {
-	// TODO: save to db
 	fmt.Printf("saving person:\n %+v", person)
 
 	personSQLStruct := sqlbuilder.NewStruct(new(sqlPerson))
-	query, args := personSQLStruct.InsertInto(sqlPersonTable, sqlPerson{
+	sql, args := personSQLStruct.InsertInto(sqlPersonTable, sqlPerson{
 		ID:        person.ID().String(),
 		Firstname: person.Firstname().String(),
 		Lastname:  person.Lastname().String(),
 		Age:       person.Age().Int(),
 	}).Build()
 
+	fmt.Println(sql)
+	fmt.Println(args)
+
 	ctxTimeout, cancel := context.WithTimeout(ctx, r.dbTimeout)
 	defer cancel()
 
-	_, err := r.db.ExecContext(ctxTimeout, query, args...)
+	_, err := r.db.ExecContext(ctxTimeout, sql, args...)
 	if err != nil {
 		return fmt.Errorf("error trying to persist person on database: %v", err)
 	}
@@ -49,8 +51,56 @@ func (r PersonRepository) Save(ctx context.Context, person person.Person) error 
 }
 
 // Update database action
-func (PersonRepository) Update(ctx context.Context, person person.Person) error {
-	// TODO: update to db
+func (r PersonRepository) Update(ctx context.Context, person person.Person) error {
 	fmt.Printf("updating person :\n %+v", person)
+
+	personSQLStruct := sqlbuilder.NewStruct(new(sqlPerson))
+	ub := personSQLStruct.Update(sqlPersonTable, sqlPerson{
+		ID:        person.ID().String(),
+		Firstname: person.Firstname().String(),
+		Lastname:  person.Lastname().String(),
+		Age:       person.Age().Int(),
+	})
+	sql, args := ub.Where(
+		ub.E("id", person.ID().String()),
+	).Build()
+
+	fmt.Println(sql)
+	fmt.Println(args)
+
+	ctxTimeout, cancel := context.WithTimeout(ctx, r.dbTimeout)
+	defer cancel()
+
+	sqlResult, err := r.db.ExecContext(ctxTimeout, sql, args...)
+	fmt.Println(sqlResult)
+	if err != nil {
+		return fmt.Errorf("error trying to persist person on database: %v", err)
+	}
+
+	return nil
+}
+
+// Update database action
+func (r PersonRepository) Delete(ctx context.Context, personID person.PersonID) error {
+	fmt.Printf("deleting person :\n %+v", personID)
+
+	personSQLStruct := sqlbuilder.NewStruct(new(sqlPerson))
+	deleteBuilder := personSQLStruct.DeleteFrom(sqlPersonTable)
+	sql, args := deleteBuilder.Where(
+		deleteBuilder.E("id", personID.String()),
+	).Build()
+
+	fmt.Println(sql)
+	fmt.Println(args)
+
+	ctxTimeout, cancel := context.WithTimeout(ctx, r.dbTimeout)
+	defer cancel()
+
+	sqlResult, err := r.db.ExecContext(ctxTimeout, sql, args...)
+	fmt.Println(sqlResult)
+	if err != nil {
+		return fmt.Errorf("error trying to persist person on database: %v", err)
+	}
+
 	return nil
 }

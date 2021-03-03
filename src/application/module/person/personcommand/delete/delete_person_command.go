@@ -1,6 +1,6 @@
 package delete
 
-import "golang_persons-api/src/domain/person/command"
+import "golang_persons-api/src/domain/module/person/command"
 
 var (
 	// PersonCommandType is a type for deleting persons command

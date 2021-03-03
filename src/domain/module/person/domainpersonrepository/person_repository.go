@@ -2,7 +2,7 @@ package domainpersonrepository
 
 import (
 	"context"
-	"golang_persons-api/src/domain/person"
+	"golang_persons-api/src/domain/module/person"
 )
 
 // PersonRepository is responsible for persisting person data model

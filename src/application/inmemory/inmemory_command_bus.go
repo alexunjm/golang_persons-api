@@ -3,7 +3,7 @@ package inmemory
 import (
 	"context"
 	"fmt"
-	"golang_persons-api/src/domain/person/command"
+	"golang_persons-api/src/domain/module/person/command"
 )
 
 // CommandBus is a bus for commands, dispatched from request controller

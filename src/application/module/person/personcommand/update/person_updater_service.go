@@ -2,8 +2,8 @@ package update
 
 import (
 	"context"
-	"golang_persons-api/src/domain/person"
-	"golang_persons-api/src/domain/person/domainpersonrepository"
+	"golang_persons-api/src/domain/module/person"
+	"golang_persons-api/src/domain/module/person/domainpersonrepository"
 )
 
 // PersonUpdaterService (use case)

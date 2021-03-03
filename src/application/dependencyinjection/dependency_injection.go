@@ -2,7 +2,7 @@ package dependencyinjection
 
 import (
 	"database/sql"
-	"golang_persons-api/src/domain/person/command"
+	"golang_persons-api/src/domain/module/person/command"
 	"golang_persons-api/src/infrastructure/module/person/persondependencyinjection"
 	"time"
 )

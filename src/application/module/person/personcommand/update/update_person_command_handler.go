@@ -3,7 +3,7 @@ package update
 import (
 	"context"
 	"fmt"
-	"golang_persons-api/src/domain/person/command"
+	"golang_persons-api/src/domain/module/person/command"
 )
 
 // NewUpdatePersonCommandHandler initializes a new UpdatePersonCommandHandler.

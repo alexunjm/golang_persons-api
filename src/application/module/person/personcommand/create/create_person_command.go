@@ -1,6 +1,6 @@
 package create
 
-import "golang_persons-api/src/domain/person/command"
+import "golang_persons-api/src/domain/module/person/command"
 
 var (
 	// PersonCommandType is a type for creating persons command

@@ -5,7 +5,7 @@ import (
 	"database/sql"
 	"golang_persons-api/src/application/dependencyinjection"
 	"golang_persons-api/src/application/inmemory"
-	"golang_persons-api/src/domain/person/command"
+	"golang_persons-api/src/domain/module/person/command"
 	"golang_persons-api/src/infrastructure/config/env"
 	"golang_persons-api/src/infrastructure/config/storage/mysqlstorage"
 	"golang_persons-api/src/infrastructure/module/person/personcontroller"

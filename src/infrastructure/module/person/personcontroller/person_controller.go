@@ -7,10 +7,10 @@ import (
 	"golang_persons-api/src/application/module/person/personcommand/delete"
 	"golang_persons-api/src/application/module/person/personcommand/update"
 	"golang_persons-api/src/application/module/person/personquery"
-	"golang_persons-api/src/domain/person"
-	"golang_persons-api/src/domain/person/command"
+	"golang_persons-api/src/domain/module/person"
+	"golang_persons-api/src/domain/module/person/command"
+	exception "golang_persons-api/src/infrastructure/http/httperror"
 	"golang_persons-api/src/infrastructure/http/httpresponses"
-	exception "golang_persons-api/src/infrastructure/httperror"
 	"net/http"
 
 	"github.com/gin-gonic/gin"

@@ -4,7 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
-	"golang_persons-api/src/domain/person"
+	"golang_persons-api/src/domain/module/person"
 	"time"
 
 	"github.com/huandu/go-sqlbuilder"

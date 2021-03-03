@@ -3,7 +3,7 @@ package delete
 import (
 	"context"
 	"fmt"
-	"golang_persons-api/src/domain/person/command"
+	"golang_persons-api/src/domain/module/person/command"
 )
 
 // NewDeletePersonCommandHandler initializes a new DeletePersonCommandHandler.

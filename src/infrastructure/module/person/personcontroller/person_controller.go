@@ -5,10 +5,11 @@ import (
 	"golang_persons-api/src/application/module/person/commands/create"
 	"golang_persons-api/src/application/module/person/commands/delete"
 	"golang_persons-api/src/application/module/person/commands/update"
-	"golang_persons-api/src/application/module/person/queries/get"
 	"golang_persons-api/src/application/module/person/queries/getall"
+	"golang_persons-api/src/application/module/person/queries/getone"
 	"golang_persons-api/src/domain/module/person"
 	"golang_persons-api/src/domain/module/person/command"
+	"golang_persons-api/src/domain/module/person/query"
 	exception "golang_persons-api/src/infrastructure/http/httperror"
 	"golang_persons-api/src/infrastructure/http/httpresponses"
 	"net/http"
@@ -25,25 +26,33 @@ var (
 // PersonController struct handles person requests
 type PersonController struct {
 	commandBus command.Bus
+	queryBus   query.Bus
 }
 
 // NewPersonController creates controller for person requests
-func NewPersonController(commandBus command.Bus) *PersonController {
-	return &PersonController{commandBus}
+func NewPersonController(commandBus command.Bus, queryBus query.Bus) *PersonController {
+	return &PersonController{commandBus, queryBus}
 }
 
-// GetPerson func gets person by id
-func (ctrl *PersonController) GetPerson(c *gin.Context) {
+// GetOnePerson func gets person by id
+func (ctrl *PersonController) GetOnePerson(c *gin.Context) {
 
-	aPersonquery := get.FindPersonQuery{ID: c.Param("person_id")}
+	aPersonquery := getone.FindPersonQuery{ID: c.Param("person_id")}
 
-	c.JSON(http.StatusOK, aPersonquery)
+	person, err := ctrl.queryBus.Dispatch(c, aPersonquery)
+	if err != nil {
+		theErr := exception.NewInternalServerError(err.Error())
+		c.JSON(theErr.Status(), theErr)
+		return
+	}
+	response := httpresponses.NewHTTPOkResponse("Person found successfully", person)
+	c.JSON(response.Status(), response)
 }
 
 // GetAllPersons func gets all persons
 func (ctrl *PersonController) GetAllPersons(c *gin.Context) {
 
-	allPersonsQuery := getall.GetPersons{}
+	allPersonsQuery := getall.FindPersonsQuery{}
 	c.JSON(http.StatusOK, allPersonsQuery)
 }
 

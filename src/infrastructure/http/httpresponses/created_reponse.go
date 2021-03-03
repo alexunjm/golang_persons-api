@@ -8,5 +8,6 @@ func NewHTTPCreatedResponse(message string) Message {
 		message,
 		http.StatusCreated,
 		"created",
+		nil,
 	}
 }

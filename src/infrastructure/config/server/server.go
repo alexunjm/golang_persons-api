@@ -6,6 +6,7 @@ import (
 	"golang_persons-api/src/application/dependencyinjection"
 	"golang_persons-api/src/application/inmemory"
 	"golang_persons-api/src/domain/module/person/command"
+	"golang_persons-api/src/domain/module/person/query"
 	"golang_persons-api/src/infrastructure/config/env"
 	"golang_persons-api/src/infrastructure/config/storage/mysqlstorage"
 	"golang_persons-api/src/infrastructure/module/person/personcontroller"
@@ -23,6 +24,7 @@ type Server struct {
 
 	// deps
 	commandBus command.Bus
+	queryBus   query.Bus
 }
 
 // New creates a new server
@@ -31,16 +33,17 @@ func New(ctx context.Context, envVariables env.EnvVariables) Server {
 	srv := Server{
 		router:     gin.Default(),
 		sqlDb:      mysqlstorage.NewConnection(envVariables),
-		commandBus: nil,
+		commandBus: inmemory.NewCommandBus(),
+		queryBus:   inmemory.NewQueryBus(),
 	}
 
 	srv.registerIndexRoute()
 
-	commandBus := inmemory.NewCommandBus()
-	srv.registerControllers(commandBus)
+	srv.registerControllers()
 
 	var duration time.Duration = 5000
-	dependencyinjection.RegisterCommandHandlers(commandBus, srv.sqlDb, duration)
+	dependencyinjection.RegisterCommandHandlers(srv.commandBus, srv.sqlDb, duration)
+	dependencyinjection.RegisterQueryHandlers(srv.queryBus, srv.sqlDb, duration)
 
 	return srv
 }
@@ -60,9 +63,9 @@ func (s *Server) registerIndexRoute() {
 
 }
 
-func (s *Server) registerControllers(commandBus command.Bus) {
+func (s *Server) registerControllers() {
 
-	personController := personcontroller.NewPersonController(commandBus)
+	personController := personcontroller.NewPersonController(s.commandBus, s.queryBus)
 	personrouter.HandleRoutes(s.router, personController)
 
 }

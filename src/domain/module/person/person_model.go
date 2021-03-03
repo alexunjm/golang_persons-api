@@ -8,6 +8,9 @@ type Person struct {
 	age       PersonAge
 }
 
+// Persons is an struct for manage a slice of persons (list of persons)
+type Persons []Person
+
 // NewPersonModel creates a new person
 func NewPersonModel(pID string, pFirstname string, pLastname string, pAge int) (Person, error) {
 

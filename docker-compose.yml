@@ -1,7 +1,7 @@
-version: "3.8"
+version: "3.3"
 
 services:
-  mooc-api:
+  persons-api-test:
     build: .
     environment:
       APP_PORT: 8080
@@ -10,9 +10,11 @@ services:
       MYSQL_PASSWORD: alex
       MYSQL_DATABASE: PERSONS
       MYSQL_PORT: 3306
-      MYSQL_HOST: 127.0.0.1
+      MYSQL_HOST: mysql
     ports:
       - 8080:8080
+    networks:
+      - app-network
 
   mysql:
     image: mysql:8.0.22
@@ -24,6 +26,13 @@ services:
       MYSQL_USER: alex
       MYSQL_PASSWORD: alex
       MYSQL_ROOT_PASSWORD: rootpass
+    networks:
+      - app-network
+
+#Docker Networks
+networks:
+  app-network:
+    driver: bridge
 
 volumes:
   mysql_data:

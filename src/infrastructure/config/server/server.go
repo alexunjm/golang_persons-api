@@ -41,9 +41,9 @@ func New(ctx context.Context, envVariables env.EnvVariables) Server {
 
 	srv.registerControllers()
 
-	var duration time.Duration = 5000
-	dependencyinjection.RegisterCommandHandlers(srv.commandBus, srv.sqlDb, duration)
-	dependencyinjection.RegisterQueryHandlers(srv.queryBus, srv.sqlDb, duration)
+	aHalfMin, _ := time.ParseDuration("30s")
+	dependencyinjection.RegisterCommandHandlers(srv.commandBus, srv.sqlDb, aHalfMin)
+	dependencyinjection.RegisterQueryHandlers(srv.queryBus, srv.sqlDb, aHalfMin)
 
 	return srv
 }

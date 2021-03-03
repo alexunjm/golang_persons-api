@@ -1,4 +1,4 @@
-package getone
+package queries
 
 // FindPersonQueryResponse is a handler for query a person
 type FindPersonQueryResponse struct {

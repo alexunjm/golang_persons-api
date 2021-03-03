@@ -3,7 +3,7 @@ package getone
 import (
 	"context"
 	"fmt"
-	"golang_persons-api/src/domain/module/person"
+	"golang_persons-api/src/application/module/person/queries"
 	"golang_persons-api/src/domain/module/person/query"
 )
 
@@ -18,11 +18,11 @@ type FindPersonQueryHandler struct {
 }
 
 // Handle method of query
-func (h FindPersonQueryHandler) Handle(ctx context.Context, query query.Query) (person.Person, error) {
+func (h FindPersonQueryHandler) Handle(ctx context.Context, query query.Query) (queries.FindPersonQueryResponse, error) {
 	// casting query to FindPersonQuery
 	findPersonQuery, ok := query.(FindPersonQuery)
 	if !ok {
-		return person.Person{}, fmt.Errorf("unexpected query FindPersonQuery; found: %+v", query)
+		return queries.FindPersonQueryResponse{}, fmt.Errorf("unexpected query FindPersonQuery; found: %+v", query)
 	}
 
 	return h.service.Find(

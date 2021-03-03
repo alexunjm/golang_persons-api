@@ -2,6 +2,7 @@ package getone
 
 import (
 	"context"
+	"golang_persons-api/src/application/module/person/queries"
 	"golang_persons-api/src/domain/module/person"
 	"golang_persons-api/src/domain/module/person/domainpersonrepository"
 )
@@ -19,11 +20,11 @@ func NewPersonFinder(repository domainpersonrepository.PersonRepository) PersonF
 }
 
 // Find database action repository call
-func (c PersonFinderService) Find(ctx context.Context, id string) (person.Person, error) {
+func (c PersonFinderService) Find(ctx context.Context, id string) (queries.FindPersonQueryResponse, error) {
 
 	personID, err := person.NewPersonID(id)
 	if err != nil {
-		return person.Person{}, err
+		return queries.FindPersonQueryResponse{}, err
 	}
 
 	return c.repository.Find(ctx, personID)

@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"golang_persons-api/src/application/module/person/queries"
 	"golang_persons-api/src/domain/module/person"
 	"time"
 
@@ -106,7 +107,7 @@ func (r PersonRepository) Delete(ctx context.Context, personID person.PersonID) 
 }
 
 // Find database action
-func (r PersonRepository) Find(ctx context.Context, personID person.PersonID) (person.Person, error) {
+func (r PersonRepository) Find(ctx context.Context, personID person.PersonID) (queries.FindPersonQueryResponse, error) {
 	fmt.Printf("finding person :\n %+v", personID)
 
 	personSQLStruct := sqlbuilder.NewStruct(new(sqlPerson))
@@ -122,27 +123,42 @@ func (r PersonRepository) Find(ctx context.Context, personID person.PersonID) (p
 	defer cancel()
 
 	var (
-		personFound sqlPerson
+		sqlPersonFound sqlPerson
 	)
 	row := r.db.QueryRowContext(ctxTimeout, sql, args...)
 
 	// Scan row data to person.
-	err := row.Scan(personSQLStruct.Addr(&personFound)...)
+	err := row.Scan(personSQLStruct.Addr(&sqlPersonFound)...)
 	if err != nil {
-		return person.Person{}, fmt.Errorf("error finding person on database: %v", err)
+		return queries.FindPersonQueryResponse{}, err
 	}
-	fmt.Println(personFound)
+	fmt.Println(sqlPersonFound)
 
-	return person.NewPersonModel(
-		personFound.ID,
-		personFound.Firstname,
-		personFound.Lastname,
-		personFound.Age,
-	)
+	return queries.FindPersonQueryResponse{
+		ID:        sqlPersonFound.ID,
+		Firstname: sqlPersonFound.Firstname,
+		Lastname:  sqlPersonFound.Lastname,
+		Age:       sqlPersonFound.Age,
+	}, nil
 }
 
-// Find database action
-func (r PersonRepository) Find2(ctx context.Context, personID person.PersonID) (person.Person, error) {
+/*
+// FindAll database action
+func (r PersonRepository) FindAll(ctx context.Context, personID person.PersonID) (person.Person, error) {
+	fmt.Printf("finding person :\n %+v", personID)
+
+	personSQLStruct := sqlbuilder.NewStruct(new(sqlPerson))
+	deleteBuilder := personSQLStruct.SelectFrom(sqlPersonTable)
+	sql, args := deleteBuilder.Where(
+		deleteBuilder.E("id", personID.String()),
+	).Build()
+
+	fmt.Println(sql)
+	fmt.Println(args)
+
+	ctxTimeout, cancel := context.Wit
+// FindAll database action
+func (r PersonRepository) FindAll(ctx context.Context, personID person.PersonID) (person.Person, error) {
 	fmt.Printf("finding person :\n %+v", personID)
 
 	personSQLStruct := sqlbuilder.NewStruct(new(sqlPerson))
@@ -164,12 +180,14 @@ func (r PersonRepository) Find2(ctx context.Context, personID person.PersonID) (
 	defer rows.Close()
 
 	if err != nil {
-		return person.Person{}, fmt.Errorf("error trying to find person on database: %v", err)
+		// return person.Person{}, fmt.Errorf("error trying to find person on database: %v", err)
+		return person.Person{}, err
 	}
 	// Scan row data to person.
 	err = rows.Scan(personSQLStruct.Addr(&personFound)...)
 	if err != nil {
-		return person.Person{}, fmt.Errorf("error finding person on database: %v", err)
+		// return person.Person{}, fmt.Errorf("error finding person on database: %v", err)
+		return person.Person{}, err
 	}
 	fmt.Println(personFound)
 
@@ -180,3 +198,32 @@ func (r PersonRepository) Find2(ctx context.Context, personID person.PersonID) (
 		personFound.Age,
 	)
 }
+hTimeout(ctx, r.dbTimeout)
+	defer cancel()
+
+	var (
+		personFound sqlPerson
+	)
+	rows, err := r.db.QueryContext(ctxTimeout, sql, args...)
+	defer rows.Close()
+
+	if err != nil {
+		// return person.Person{}, fmt.Errorf("error trying to find person on database: %v", err)
+		return person.Person{}, err
+	}
+	// Scan row data to person.
+	err = rows.Scan(personSQLStruct.Addr(&personFound)...)
+	if err != nil {
+		// return person.Person{}, fmt.Errorf("error finding person on database: %v", err)
+		return person.Person{}, err
+	}
+	fmt.Println(personFound)
+
+	return person.NewPersonModel(
+		personFound.ID,
+		personFound.Firstname,
+		personFound.Lastname,
+		personFound.Age,
+	)
+}
+*/

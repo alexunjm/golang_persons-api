@@ -3,7 +3,7 @@ package inmemory
 import (
 	"context"
 	"fmt"
-	"golang_persons-api/src/domain/module/person"
+	"golang_persons-api/src/application/module/person/queries"
 	"golang_persons-api/src/domain/module/person/query"
 )
 
@@ -33,7 +33,7 @@ func (b QueryBus) getHandler(queryType query.Type) query.Handler {
 }
 
 // Dispatch finds handler for query and delegates to handler, handle the query
-func (b QueryBus) Dispatch(ctx context.Context, query query.Query) (person.Person, error) {
+func (b QueryBus) Dispatch(ctx context.Context, query query.Query) (queries.FindPersonQueryResponse, error) {
 	handler := b.getHandler(query.Type())
 	return handler.Handle(ctx, query)
 }

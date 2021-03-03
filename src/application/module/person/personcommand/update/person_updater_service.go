@@ -22,6 +22,5 @@ func (c PersonUpdaterService) Update(ctx context.Context, id string, firstname s
 	if err != nil {
 		return err
 	}
-	c.repository.Update(ctx, personModel)
-	return nil
+	return c.repository.Update(ctx, personModel)
 }

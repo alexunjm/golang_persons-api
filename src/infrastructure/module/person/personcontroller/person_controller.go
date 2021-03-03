@@ -1,10 +1,12 @@
 package personcontroller
 
 import (
+	"errors"
 	"fmt"
 	"golang_persons-api/src/application/module/person/personcommand/create"
 	"golang_persons-api/src/application/module/person/personcommand/update"
 	"golang_persons-api/src/application/module/person/personquery"
+	"golang_persons-api/src/domain/person"
 	"golang_persons-api/src/domain/person/command"
 	"golang_persons-api/src/infrastructure/http/httpresponses"
 	exception "golang_persons-api/src/infrastructure/httperror"
@@ -54,13 +56,34 @@ func (ctrl *PersonController) CreatePerson(c *gin.Context) {
 
 	var createPersonCommand create.CreatePersonCommand
 	if err := c.ShouldBindJSON(&createPersonCommand); err != nil {
-		// theErr := exception.NewUnprocessableEntityError(err.Error())
-		theErr := exception.NewUnprocessableEntityError("invalid json body")
+		theErr := exception.NewUnprocessableEntityError(err.Error())
+		// theErr := exception.NewUnprocessableEntityError("invalid json body")
 		c.JSON(theErr.Status(), theErr)
 		return
 	}
 
-	ctrl.commandBus.Dispatch(createPersonCommand)
+	if err := ctrl.commandBus.Dispatch(c, createPersonCommand); err != nil {
+
+		switch {
+
+		case
+			errors.Is(err, person.ErrInvalidPersonID),
+			errors.Is(err, person.ErrEmptyPersonFirstname),
+			errors.Is(err, person.ErrEmptyPersonLastname),
+			errors.Is(err, person.ErrInvalidPersonAge):
+
+			theErr := exception.NewBadRequestError(err.Error())
+			c.JSON(theErr.Status(), theErr)
+			return
+
+		default:
+
+			theErr := exception.NewInternalServerError(err.Error())
+			c.JSON(theErr.Status(), theErr)
+			return
+
+		}
+	}
 
 	response := httpresponses.NewHTTPCreatedResponse("Person created successfully")
 	c.JSON(response.Status(), response)
@@ -75,7 +98,7 @@ func (ctrl *PersonController) UpdatePerson(c *gin.Context) {
 		c.JSON(theErr.Status(), theErr)
 		return
 	}
-	ctrl.commandBus.Dispatch(updatePersonCommand)
+	ctrl.commandBus.Dispatch(c, updatePersonCommand)
 
 	response := httpresponses.NewHTTPCreatedResponse("Person updated successfully")
 	c.JSON(response.Status(), response)

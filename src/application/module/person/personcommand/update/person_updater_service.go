@@ -1,6 +1,7 @@
 package update
 
 import (
+	"context"
 	"golang_persons-api/src/domain/person"
 	"golang_persons-api/src/domain/person/domainpersonrepository"
 )
@@ -16,11 +17,11 @@ func NewPersonUpdater(repository domainpersonrepository.PersonRepository) Person
 }
 
 // Update database action repository call
-func (c PersonUpdaterService) Update(id string, firstname string, lastname string, age int) error {
+func (c PersonUpdaterService) Update(ctx context.Context, id string, firstname string, lastname string, age int) error {
 	personModel, err := person.NewPersonModel(id, firstname, lastname, age)
 	if err != nil {
 		return err
 	}
-	c.repository.Update(personModel)
+	c.repository.Update(ctx, personModel)
 	return nil
 }

@@ -1,6 +1,7 @@
 package create
 
 import (
+	"context"
 	"fmt"
 	"golang_persons-api/src/domain/person/command"
 )
@@ -16,7 +17,7 @@ type CreatePersonCommandHandler struct {
 }
 
 // Handle method of command
-func (h CreatePersonCommandHandler) Handle(command command.Command) error {
+func (h CreatePersonCommandHandler) Handle(ctx context.Context, command command.Command) error {
 	// casting command to CreatePersonCommand
 	createPersonCommand, ok := command.(CreatePersonCommand)
 	if !ok {
@@ -24,6 +25,7 @@ func (h CreatePersonCommandHandler) Handle(command command.Command) error {
 	}
 
 	return h.service.Create(
+		ctx,
 		createPersonCommand.ID,
 		createPersonCommand.Firstname,
 		createPersonCommand.Lastname,

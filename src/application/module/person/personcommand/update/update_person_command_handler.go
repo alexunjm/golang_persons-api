@@ -1,6 +1,7 @@
 package update
 
 import (
+	"context"
 	"fmt"
 	"golang_persons-api/src/domain/person/command"
 )
@@ -16,7 +17,7 @@ type UpdatePersonCommandHandler struct {
 }
 
 // Handle method of command
-func (h UpdatePersonCommandHandler) Handle(command command.Command) error {
+func (h UpdatePersonCommandHandler) Handle(ctx context.Context, command command.Command) error {
 	// casting command to UpdatePersonCommand
 	updatePersonCommand, ok := command.(UpdatePersonCommand)
 	if !ok {
@@ -24,6 +25,7 @@ func (h UpdatePersonCommandHandler) Handle(command command.Command) error {
 	}
 
 	return h.service.Update(
+		ctx,
 		updatePersonCommand.ID,
 		updatePersonCommand.Firstname,
 		updatePersonCommand.Lastname,

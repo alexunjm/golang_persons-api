@@ -1,6 +1,8 @@
 package command
 
+import "context"
+
 // Handler is a contract to handle commands
 type Handler interface {
-	Handle(command Command) error
+	Handle(context.Context, Command) error
 }

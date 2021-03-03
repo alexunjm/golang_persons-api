@@ -2,7 +2,6 @@ package api
 
 import (
 	"context"
-	"fmt"
 	"golang_persons-api/src/infrastructure/config/env"
 	"golang_persons-api/src/infrastructure/config/server"
 	"log"
@@ -19,13 +18,6 @@ func init() {
 
 // Run func starts the gin api
 func Run() {
-
-	defer func() {
-		if r := recover(); r != nil {
-			fmt.Println("\n ----- No handled error -----")
-			log.Fatal(r)
-		}
-	}()
 
 	// loads default config and env config
 	envVariables := env.LoadAppEnv()

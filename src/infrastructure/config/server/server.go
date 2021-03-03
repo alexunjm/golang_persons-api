@@ -11,6 +11,7 @@ import (
 	"golang_persons-api/src/infrastructure/module/person/personcontroller"
 	"golang_persons-api/src/infrastructure/module/person/personrouter"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -38,7 +39,8 @@ func New(ctx context.Context, envVariables env.EnvVariables) Server {
 	commandBus := inmemory.NewCommandBus()
 	srv.registerControllers(commandBus)
 
-	dependencyinjection.RegisterCommandHandlers(commandBus)
+	var duration time.Duration = 5000
+	dependencyinjection.RegisterCommandHandlers(commandBus, srv.sqlDb, duration)
 
 	return srv
 }

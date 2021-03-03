@@ -1,6 +1,7 @@
 package inmemory
 
 import (
+	"context"
 	"fmt"
 	"golang_persons-api/src/domain/person/command"
 )
@@ -31,7 +32,7 @@ func (b CommandBus) getHandler(commandType command.Type) command.Handler {
 }
 
 // Dispatch finds handler for command and delegates to handler, handle the command
-func (b CommandBus) Dispatch(command command.Command) {
+func (b CommandBus) Dispatch(ctx context.Context, command command.Command) error {
 	handler := b.getHandler(command.Type())
-	handler.Handle(command)
+	return handler.Handle(ctx, command)
 }

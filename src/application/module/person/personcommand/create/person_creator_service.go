@@ -1,6 +1,7 @@
 package create
 
 import (
+	"context"
 	"golang_persons-api/src/domain/person"
 	"golang_persons-api/src/domain/person/domainpersonrepository"
 )
@@ -18,14 +19,14 @@ func NewPersonCreator(repository domainpersonrepository.PersonRepository) Person
 }
 
 // Create database action repository call
-func (c PersonCreatorService) Create(id string, firstname string, lastname string, age int) error {
+func (c PersonCreatorService) Create(ctx context.Context, id string, firstname string, lastname string, age int) error {
 
 	personModel, err := person.NewPersonModel(id, firstname, lastname, age)
 	if err != nil {
 		return err
 	}
 
-	err = c.repository.Save(personModel)
+	err = c.repository.Save(ctx, personModel)
 	if err != nil {
 		return err
 	}

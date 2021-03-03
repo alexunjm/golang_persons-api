@@ -1,0 +1,29 @@
+version: "3.8"
+
+services:
+  mooc-api:
+    build: .
+    environment:
+      APP_PORT: 8080
+      MYSQL_DRIVER: mysql
+      MYSQL_USERNAME: alex
+      MYSQL_PASSWORD: alex
+      MYSQL_DATABASE: PERSONS
+      MYSQL_PORT: 3306
+      MYSQL_HOST: 127.0.0.1
+    ports:
+      - 8080:8080
+
+  mysql:
+    image: mysql:8.0.22
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./sql:/docker-entrypoint-initdb.d
+    environment:
+      MYSQL_DATABASE: PERSONS
+      MYSQL_USER: alex
+      MYSQL_PASSWORD: alex
+      MYSQL_ROOT_PASSWORD: rootpass
+
+volumes:
+  mysql_data:

@@ -2,11 +2,11 @@ package personcontroller
 
 import (
 	"errors"
-	"golang_persons-api/src/application/module/person/command/create"
-	"golang_persons-api/src/application/module/person/command/delete"
-	"golang_persons-api/src/application/module/person/command/update"
-	"golang_persons-api/src/application/module/person/query/get"
-	"golang_persons-api/src/application/module/person/query/getall"
+	"golang_persons-api/src/application/module/person/commands/create"
+	"golang_persons-api/src/application/module/person/commands/delete"
+	"golang_persons-api/src/application/module/person/commands/update"
+	"golang_persons-api/src/application/module/person/queries/get"
+	"golang_persons-api/src/application/module/person/queries/getall"
 	"golang_persons-api/src/domain/module/person"
 	"golang_persons-api/src/domain/module/person/command"
 	exception "golang_persons-api/src/infrastructure/http/httperror"

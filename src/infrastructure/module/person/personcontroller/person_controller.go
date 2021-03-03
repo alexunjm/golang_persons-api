@@ -2,11 +2,11 @@ package personcontroller
 
 import (
 	"errors"
-	"fmt"
 	"golang_persons-api/src/application/module/person/command/create"
 	"golang_persons-api/src/application/module/person/command/delete"
 	"golang_persons-api/src/application/module/person/command/update"
-	"golang_persons-api/src/application/module/person/personquery"
+	"golang_persons-api/src/application/module/person/query/get"
+	"golang_persons-api/src/application/module/person/query/getall"
 	"golang_persons-api/src/domain/module/person"
 	"golang_persons-api/src/domain/module/person/command"
 	exception "golang_persons-api/src/infrastructure/http/httperror"
@@ -35,21 +35,16 @@ func NewPersonController(commandBus command.Bus) *PersonController {
 // GetPerson func gets person by id
 func (ctrl *PersonController) GetPerson(c *gin.Context) {
 
-	personquery := personquery.Findpersonquery{ID: c.Param("person_id")}
+	aPersonquery := get.FindPersonQuery{ID: c.Param("person_id")}
 
-	sample := personquery.GetImmutable()
-	fmt.Printf("%+v", sample)
-	fmt.Printf("id: %v",
-		sample.GetID(),
-	)
-
-	c.JSON(http.StatusOK, personquery)
+	c.JSON(http.StatusOK, aPersonquery)
 }
 
 // GetAllPersons func gets all persons
 func (ctrl *PersonController) GetAllPersons(c *gin.Context) {
 
-	c.JSON(http.StatusOK, message)
+	allPersonsQuery := getall.GetPersons{}
+	c.JSON(http.StatusOK, allPersonsQuery)
 }
 
 // CreatePerson func creates a new person

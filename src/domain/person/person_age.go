@@ -22,8 +22,16 @@ func NewPersonAge(value int) (PersonAge, error) {
 	return PersonAge{value: strconv.Itoa(value)}, nil
 }
 
+/*
 // String is a toString method.
 // Converts the PersonAge into string
 func (p PersonAge) String() string {
 	return p.value
+}
+*/
+// Int is a parseInt method.
+// Converts the PersonAge into int
+func (p PersonAge) Int() int {
+	intValue, _ := strconv.Atoi(p.value)
+	return intValue
 }

@@ -42,3 +42,23 @@ func NewPersonModel(pID string, pFirstname string, pLastname string, pAge int) (
 		age,
 	}, nil
 }
+
+// ID returns PersonID
+func (p Person) ID() PersonID {
+	return p.id
+}
+
+// Firstname returns PersonFirstname
+func (p Person) Firstname() PersonFirstname {
+	return p.firstname
+}
+
+// Lastname returns PersonLastname
+func (p Person) Lastname() PersonLastname {
+	return p.lastname
+}
+
+// Age returns PersonAge
+func (p Person) Age() PersonAge {
+	return p.age
+}

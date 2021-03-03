@@ -24,6 +24,11 @@ func (c PersonCreatorService) Create(id string, firstname string, lastname strin
 	if err != nil {
 		return err
 	}
-	c.repository.Save(personModel)
+
+	err = c.repository.Save(personModel)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }

@@ -124,7 +124,45 @@ func (r PersonRepository) Find(ctx context.Context, personID person.PersonID) (p
 	var (
 		personFound sqlPerson
 	)
+	row := r.db.QueryRowContext(ctxTimeout, sql, args...)
+
+	// Scan row data to person.
+	err := row.Scan(personSQLStruct.Addr(&personFound)...)
+	if err != nil {
+		return person.Person{}, fmt.Errorf("error finding person on database: %v", err)
+	}
+	fmt.Println(personFound)
+
+	return person.NewPersonModel(
+		personFound.ID,
+		personFound.Firstname,
+		personFound.Lastname,
+		personFound.Age,
+	)
+}
+
+// Find database action
+func (r PersonRepository) Find2(ctx context.Context, personID person.PersonID) (person.Person, error) {
+	fmt.Printf("finding person :\n %+v", personID)
+
+	personSQLStruct := sqlbuilder.NewStruct(new(sqlPerson))
+	deleteBuilder := personSQLStruct.SelectFrom(sqlPersonTable)
+	sql, args := deleteBuilder.Where(
+		deleteBuilder.E("id", personID.String()),
+	).Build()
+
+	fmt.Println(sql)
+	fmt.Println(args)
+
+	ctxTimeout, cancel := context.WithTimeout(ctx, r.dbTimeout)
+	defer cancel()
+
+	var (
+		personFound sqlPerson
+	)
 	rows, err := r.db.QueryContext(ctxTimeout, sql, args...)
+	defer rows.Close()
+
 	if err != nil {
 		return person.Person{}, fmt.Errorf("error trying to find person on database: %v", err)
 	}

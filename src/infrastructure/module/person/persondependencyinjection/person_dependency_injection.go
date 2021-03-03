@@ -2,9 +2,9 @@ package persondependencyinjection
 
 import (
 	"database/sql"
-	"golang_persons-api/src/application/module/person/personcommand/create"
-	"golang_persons-api/src/application/module/person/personcommand/delete"
-	"golang_persons-api/src/application/module/person/personcommand/update"
+	"golang_persons-api/src/application/module/person/command/create"
+	"golang_persons-api/src/application/module/person/command/delete"
+	"golang_persons-api/src/application/module/person/command/update"
 	"golang_persons-api/src/domain/module/person/command"
 	"golang_persons-api/src/infrastructure/module/person/personrepository"
 	"time"

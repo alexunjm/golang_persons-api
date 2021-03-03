@@ -3,9 +3,9 @@ package personcontroller
 import (
 	"errors"
 	"fmt"
-	"golang_persons-api/src/application/module/person/personcommand/create"
-	"golang_persons-api/src/application/module/person/personcommand/delete"
-	"golang_persons-api/src/application/module/person/personcommand/update"
+	"golang_persons-api/src/application/module/person/command/create"
+	"golang_persons-api/src/application/module/person/command/delete"
+	"golang_persons-api/src/application/module/person/command/update"
 	"golang_persons-api/src/application/module/person/personquery"
 	"golang_persons-api/src/domain/module/person"
 	"golang_persons-api/src/domain/module/person/command"

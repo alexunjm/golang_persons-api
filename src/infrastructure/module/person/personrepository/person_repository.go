@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"golang_persons-api/src/application/module/person/queries"
 	"golang_persons-api/src/domain/module/person"
 	"time"
 
@@ -106,7 +107,7 @@ func (r PersonRepository) Delete(ctx context.Context, personID person.PersonID) 
 }
 
 // Find database action
-func (r PersonRepository) Find(ctx context.Context, personID person.PersonID) (person.Person, error) {
+func (r PersonRepository) Find(ctx context.Context, personID person.PersonID) (interface{}, error) {
 	fmt.Printf("finding person :\n %+v", personID)
 
 	personSQLStruct := sqlbuilder.NewStruct(new(sqlPerson))
@@ -122,23 +123,63 @@ func (r PersonRepository) Find(ctx context.Context, personID person.PersonID) (p
 	defer cancel()
 
 	var (
-		personFound sqlPerson
+		sqlPersonFound sqlPerson
+	)
+	row := r.db.QueryRowContext(ctxTimeout, sql, args...)
+
+	// Scan row data to person.
+	err := row.Scan(personSQLStruct.Addr(&sqlPersonFound)...)
+	if err != nil {
+		return queries.FindPersonQueryResponse{}, err
+	}
+	fmt.Println(sqlPersonFound)
+
+	return queries.FindPersonQueryResponse{
+		ID:        sqlPersonFound.ID,
+		Firstname: sqlPersonFound.Firstname,
+		Lastname:  sqlPersonFound.Lastname,
+		Age:       sqlPersonFound.Age,
+	}, nil
+}
+
+// FindAll database action
+func (r PersonRepository) FindAll(ctx context.Context) ([]interface{}, error) {
+	fmt.Printf("finding all persons\n")
+
+	personSQLStruct := sqlbuilder.NewStruct(new(sqlPerson))
+	deleteBuilder := personSQLStruct.SelectFrom(sqlPersonTable)
+	sql, args := deleteBuilder.Build()
+
+	fmt.Println(sql)
+	fmt.Println(args)
+
+	ctxTimeout, cancel := context.WithTimeout(ctx, r.dbTimeout)
+	defer cancel()
+
+	var (
+		sqlPersonFound sqlPerson
 	)
 	rows, err := r.db.QueryContext(ctxTimeout, sql, args...)
 	if err != nil {
-		return person.Person{}, fmt.Errorf("error trying to find person on database: %v", err)
+		return []interface{}{}, err
 	}
-	// Scan row data to person.
-	err = rows.Scan(personSQLStruct.Addr(&personFound)...)
-	if err != nil {
-		return person.Person{}, fmt.Errorf("error finding person on database: %v", err)
-	}
-	fmt.Println(personFound)
+	defer rows.Close()
 
-	return person.NewPersonModel(
-		personFound.ID,
-		personFound.Firstname,
-		personFound.Lastname,
-		personFound.Age,
-	)
+	allPersonsFound := make([]interface{}, 0)
+	for rows.Next() {
+
+		// Scan row data to person.
+		err := rows.Scan(personSQLStruct.Addr(&sqlPersonFound)...)
+		if err != nil {
+			return []interface{}{}, err
+		}
+		allPersonsFound = append(allPersonsFound, queries.FindPersonQueryResponse{
+			ID:        sqlPersonFound.ID,
+			Firstname: sqlPersonFound.Firstname,
+			Lastname:  sqlPersonFound.Lastname,
+			Age:       sqlPersonFound.Age,
+		})
+	}
+
+	return allPersonsFound, nil
 }

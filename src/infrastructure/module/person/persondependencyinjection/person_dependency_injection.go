@@ -5,6 +5,7 @@ import (
 	"golang_persons-api/src/application/module/person/commands/create"
 	"golang_persons-api/src/application/module/person/commands/delete"
 	"golang_persons-api/src/application/module/person/commands/update"
+	"golang_persons-api/src/application/module/person/queries/getall"
 	"golang_persons-api/src/application/module/person/queries/getone"
 	"golang_persons-api/src/domain/module/person/command"
 	"golang_persons-api/src/domain/module/person/query"
@@ -12,36 +13,49 @@ import (
 	"time"
 )
 
-// RegisterPersonCommandHandlers func registers all command handlers
-func RegisterPersonCommandHandlers(bus command.Bus, db *sql.DB, dbTimeout time.Duration) {
+type PersonDependencyInjection struct {
+	commandBus command.Bus
+	queryBus   query.Bus
+	db         *sql.DB
+	dbTimeout  time.Duration
+}
 
-	personRepository := repository.NewPersonRepository(db, dbTimeout)
+// NewPersonDependencyInjection initialize a PersonDependencyInjection
+func NewPersonDependencyInjection(commandBus command.Bus, queryBus query.Bus, db *sql.DB, dbTimeout time.Duration) PersonDependencyInjection {
+	return PersonDependencyInjection{
+		commandBus, queryBus, db, dbTimeout,
+	}
+}
+
+// RegisterPersonCommandHandlers func registers all command handlers
+func (pdi PersonDependencyInjection) RegisterPersonCommandHandlers() {
+
+	personRepository := repository.NewPersonRepository(pdi.db, pdi.dbTimeout)
 
 	personCreator := create.NewPersonCreator(personRepository)
 	createPersonCommandHandler := create.NewCreatePersonCommandHandler(personCreator)
-	bus.Register(create.PersonCommandType, createPersonCommandHandler)
+	pdi.commandBus.Register(create.PersonCommandType, createPersonCommandHandler)
 
 	personUpdater := update.NewPersonUpdater(personRepository)
 	updatePersonCommandHandler := update.NewUpdatePersonCommandHandler(personUpdater)
-	bus.Register(update.PersonCommandType, updatePersonCommandHandler)
+	pdi.commandBus.Register(update.PersonCommandType, updatePersonCommandHandler)
 
 	personDeleter := delete.NewPersonDeleter(personRepository)
 	deletePersonCommandHandler := delete.NewDeletePersonCommandHandler(personDeleter)
-	bus.Register(delete.PersonCommandType, deletePersonCommandHandler)
+	pdi.commandBus.Register(delete.PersonCommandType, deletePersonCommandHandler)
 }
 
-// RegisterPersonQueryHandlers func registers all cqueryd handlers
-func RegisterPersonQueryHandlers(bus query.Bus, db *sql.DB, dbTimeout time.Duration) {
+// RegisterPersonQueryHandlers func registers all query handlers
+func (pdi PersonDependencyInjection) RegisterPersonQueryHandlers() {
 
-	personRepository := repository.NewPersonRepository(db, dbTimeout)
+	personRepository := repository.NewPersonRepository(pdi.db, pdi.dbTimeout)
 
 	personFinder := getone.NewPersonFinder(personRepository)
 	findPersonQueryHandler := getone.NewFindPersonQueryHandler(personFinder)
-	bus.Register(getone.PersonQueryType, findPersonQueryHandler)
-	/*
-		// TODO: find all
-		findAllPersons := getall.NewFindAllPersons(personRepository)
-		findAllPersonsQueryHandler := getall.NewFindAllPersonsQueryHandler(findAllPersons)
-		bus.Register(getall.PersonQueryType, findAllPersonsQueryHandler)
-	*/
+	pdi.queryBus.Register(getone.PersonQueryType, findPersonQueryHandler)
+
+	allPersonsFinder := getall.NewAllPersonsFinder(personRepository)
+	findAllPersonsQueryHandler := getall.NewFindAllPersonsQueryHandler(allPersonsFinder)
+	pdi.queryBus.Register(getall.PersonQueryType, findAllPersonsQueryHandler)
+
 }

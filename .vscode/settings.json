@@ -3,6 +3,7 @@
         "deps",
         "godotenv",
         "gonic",
+        "huandu",
         "inmemory",
         "joho",
         "mysqlstorage"

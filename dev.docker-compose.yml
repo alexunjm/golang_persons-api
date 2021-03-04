@@ -1,7 +1,7 @@
 version: "3.3"
 
 services:
-  persons-api-test:
+  persons-api-dev:
     container_name: persons-api
     image: golang:alpine
     volumes:
@@ -23,7 +23,7 @@ services:
     ports:
       - 8080:8080
     networks:
-      - app-network
+      - api-network
 
   mysql:
     image: mysql:8.0.22
@@ -35,12 +35,14 @@ services:
       MYSQL_USER: alex
       MYSQL_PASSWORD: alex
       MYSQL_ROOT_PASSWORD: rootpass
+    ports:
+      - 3306:3306
     networks:
-      - app-network
+      - api-network
 
 #Docker Networks
 networks:
-  app-network:
+  api-network:
     driver: bridge
 
 volumes:

@@ -12,7 +12,6 @@ import (
 	"golang_persons-api/src/domain/module/person/query"
 	exception "golang_persons-api/src/infrastructure/http/httperror"
 	"golang_persons-api/src/infrastructure/http/httpresponses"
-	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
@@ -52,8 +51,14 @@ func (ctrl *PersonController) GetOnePerson(c *gin.Context) {
 // GetAllPersons func gets all persons
 func (ctrl *PersonController) GetAllPersons(c *gin.Context) {
 
-	allPersonsQuery := getall.FindPersonsQuery{}
-	c.JSON(http.StatusOK, allPersonsQuery)
+	persons, err := ctrl.queryBus.Dispatch(c, getall.FindAllPersonsQuery{})
+	if err != nil {
+		theErr := exception.NewInternalServerError(err.Error())
+		c.JSON(theErr.Status(), theErr)
+		return
+	}
+	response := httpresponses.NewHTTPOkResponse("All persons found successfully", persons)
+	c.JSON(response.Status(), response)
 }
 
 // CreatePerson func creates a new person

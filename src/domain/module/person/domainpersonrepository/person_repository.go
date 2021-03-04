@@ -11,5 +11,5 @@ type PersonRepository interface {
 	Update(ctx context.Context, person person.Person) error
 	Delete(ctx context.Context, personID person.PersonID) error
 	Find(ctx context.Context, personID person.PersonID) (interface{}, error)
-	// FindAll(ctx context.Context) (person.Persons, error)
+	FindAll(ctx context.Context) ([]interface{}, error)
 }

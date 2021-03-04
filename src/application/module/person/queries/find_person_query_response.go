@@ -7,3 +7,6 @@ type FindPersonQueryResponse struct {
 	Lastname  string `json:"lastname"`
 	Age       int    `json:"age"`
 }
+
+// FindAllPersonsQueryResponse is a handler for query a person
+type FindAllPersonsQueryResponse []FindPersonQueryResponse

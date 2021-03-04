@@ -3,13 +3,13 @@ package server
 import (
 	"context"
 	"database/sql"
-	"golang_persons-api/src/application/dependencyinjection"
 	"golang_persons-api/src/application/inmemory"
 	"golang_persons-api/src/domain/module/person/command"
 	"golang_persons-api/src/domain/module/person/query"
 	"golang_persons-api/src/infrastructure/config/env"
 	"golang_persons-api/src/infrastructure/config/storage/mysqlstorage"
 	"golang_persons-api/src/infrastructure/module/person/personcontroller"
+	"golang_persons-api/src/infrastructure/module/person/persondependencyinjection"
 	"golang_persons-api/src/infrastructure/module/person/personrouter"
 	"net/http"
 	"time"
@@ -42,8 +42,14 @@ func New(ctx context.Context, envVariables env.EnvVariables) Server {
 	srv.registerControllers()
 
 	aHalfMin, _ := time.ParseDuration("30s")
-	dependencyinjection.RegisterCommandHandlers(srv.commandBus, srv.sqlDb, aHalfMin)
-	dependencyinjection.RegisterQueryHandlers(srv.queryBus, srv.sqlDb, aHalfMin)
+	personDI := persondependencyinjection.NewPersonDependencyInjection(
+		srv.commandBus,
+		srv.queryBus,
+		srv.sqlDb,
+		aHalfMin,
+	)
+	personDI.RegisterPersonCommandHandlers()
+	personDI.RegisterPersonQueryHandlers()
 
 	return srv
 }

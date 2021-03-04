@@ -20,7 +20,7 @@ func NewPersonFinder(repository domainpersonrepository.PersonRepository) PersonF
 }
 
 // Find database action repository call
-func (c PersonFinderService) Find(ctx context.Context, id string) (queries.FindPersonQueryResponse, error) {
+func (c PersonFinderService) Find(ctx context.Context, id string) (interface{}, error) {
 
 	personID, err := person.NewPersonID(id)
 	if err != nil {

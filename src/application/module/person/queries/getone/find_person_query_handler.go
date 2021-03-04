@@ -18,7 +18,7 @@ type FindPersonQueryHandler struct {
 }
 
 // Handle method of query
-func (h FindPersonQueryHandler) Handle(ctx context.Context, query query.Query) (queries.FindPersonQueryResponse, error) {
+func (h FindPersonQueryHandler) Handle(ctx context.Context, query query.Query) (interface{}, error) {
 	// casting query to FindPersonQuery
 	findPersonQuery, ok := query.(FindPersonQuery)
 	if !ok {

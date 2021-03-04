@@ -107,7 +107,7 @@ func (r PersonRepository) Delete(ctx context.Context, personID person.PersonID) 
 }
 
 // Find database action
-func (r PersonRepository) Find(ctx context.Context, personID person.PersonID) (queries.FindPersonQueryResponse, error) {
+func (r PersonRepository) Find(ctx context.Context, personID person.PersonID) (interface{}, error) {
 	fmt.Printf("finding person :\n %+v", personID)
 
 	personSQLStruct := sqlbuilder.NewStruct(new(sqlPerson))

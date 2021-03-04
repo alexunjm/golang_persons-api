@@ -104,7 +104,7 @@ func (ctrl *PersonController) DeletePerson(c *gin.Context) {
 	handleResponse(
 		c,
 		ctrl.commandBus.Dispatch(c, deletePersonCommand),
-		httpresponses.NewHTTPCreatedResponse("Person deleted successfully"),
+		httpresponses.NewHTTPNoContentResponse("Person deleted successfully"),
 	)
 }
 
